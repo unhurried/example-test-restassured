@@ -21,14 +21,24 @@ class TestHelper {
                 .build()
         }
 
-        fun createToken(): String {
-            val algorithm: Algorithm = Algorithm.HMAC256("secret")
+        fun createRequestSpecWithoutToken(): RequestSpecification {
+            return RequestSpecBuilder().setBaseUri("http://localhost:3001")
+                .addFilter(RequestLoggingFilter()).addFilter(ResponseLoggingFilter())
+                .setContentType(ContentType.JSON)
+                .setAccept(ContentType.JSON)
+                .build()
+        }
+
+        private fun createToken(): String {
+            val hmaC256 = Algorithm.HMAC256("secret")
+            val algorithm: Algorithm = hmaC256
             return JWT.create()
+                .withKeyId("kid-for-test")
                 .withIssuer("http://localhost:3002")
                 .withClaim("scope", "todo")
-                .withExpiresAt(Date(Date().time + 10000))
+                .withExpiresAt(Date(Date().time + 60 * 60 * 1000))
                 .withAudience("todo-api")
-                .withSubject("123")
+                .withSubject("sub-for-test")
                 .sign(algorithm)
         }
     }

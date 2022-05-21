@@ -126,4 +126,27 @@ class TodoTest {
             body("items.id", hasItem(id2))
         }
     }
+
+    @Test fun `authentication failed`() {
+        val spec = TestHelper.createRequestSpecWithoutToken()
+
+        // call API without Authorization Header
+        Given {
+            spec(spec)
+        } When {
+            get("/todos")
+        } Then {
+            statusCode(HttpStatus.SC_UNAUTHORIZED)
+        }
+
+        // call API with invalid token
+        Given {
+            spec(spec)
+            header("Authorization", "Bearer abc")
+        } When {
+            get("/todos")
+        } Then {
+            statusCode(HttpStatus.SC_UNAUTHORIZED)
+        }
+    }
 }
