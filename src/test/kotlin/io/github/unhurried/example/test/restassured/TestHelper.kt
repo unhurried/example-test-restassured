@@ -13,7 +13,6 @@ class TestHelper {
     companion object {
         fun createRequestSpec(): RequestSpecification {
             return RequestSpecBuilder().setBaseUri("http://localhost:3001")
-                .addFilter(RequestLoggingFilter()).addFilter(RequestLoggingFilter())
                 .addFilter(RequestLoggingFilter()).addFilter(ResponseLoggingFilter())
                 .addHeader("Authorization",  "Bearer " + createToken())
                 .setContentType(ContentType.JSON)
